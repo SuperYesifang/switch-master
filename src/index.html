@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<script src="./SwitchMaster.cdn.js"></script>
+	<script>
+		let master = new SwitchMaster([
+			{ name: "面板1", status: false },
+			{ name: "面板2", status: false },
+			{ name: "面板3", status: false },
+			{ name: "面板4", status: false },
+			{ name: "面板5", status: false },
+			{ name: "面板6", status: false },
+			{ name: "面板7", status: false }
+		]);
+		console.log(master);
+		let s = new Switch({ name: "面板x", status: true});
+		console.log(s);
+		master.addSwitch(s);
+	</script>
+</body>
+</html>

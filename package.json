@@ -1,0 +1,36 @@
+{
+  "name": "switch-master",
+  "version": "0.1.0",
+  "author": "Yesifang",
+  "license": "MIT",
+  "description": "Switch Master, when you have many switch coupling logic, you need it! 开关管家，当你有许多开关逻辑耦合时，你需要它！",
+  "main": "./src/index.js",
+  "scripts": {
+    "serve": "npx webpack-dev-server",
+    "build": "npx webpack"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.9",
+    "@babel/preset-env": "^7.16.11",
+    "babel-loader": "^8.2.5",
+    "html-webpack-plugin": "^5.5.0",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.10.0",
+    "webpack-dev-server": "^4.8.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:SuperYesifang/switch-master.git"
+  },
+  "keywords": [
+    "switch manage",
+    "panel manage",
+    "switch controller",
+    "panel controller",
+    "switch master"
+  ],
+  "bugs": {
+    "url": "https://github.com/SuperYesifang/switch-master/issues"
+  },
+  "homepage": "https://yesifang.com"
+}
