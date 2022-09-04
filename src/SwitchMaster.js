@@ -20,16 +20,36 @@ function getBsFromOsByAs(Os, KA, As, KB) {
 	}
 }
 
-function removeAsFromOs(Os, KA, As) {
-	if ((Os instanceof Array) && (As instanceof Array)) {
-		As.forEach(A => {
-			for(let i = 0; i < Os.length; i++) {
-				if (Os[i][KA] == A) {
-					Os.splice(i, 1);
-					break;
+function getBFromOByA(O, KA, A, KB) {
+	if (A instanceof Array) {
+		let records = {}, once = 1;
+		return A.map(_A => {
+			let B = [];
+			if (records[_A]) B = records[_A];
+			else if (once) {
+				for (let k in O) {
+					if (O[k][KA] == _A) B.push(KB ? O[k][KB] : O[k]);
+					if (records[O[k][KA]]) records[O[k][KA]].push(KB ? O[k][KB] : O[k]);
+					else records[O[k][KA]] = [KB ? O[k][KB] : O[k]];
 				}
+				once = 0;
 			}
+			return B.length <= 1 ? B[0] : B;
 		})
+	}
+	let B = [];
+	for (let k in O) {
+		if (O[k][KA] == A) {
+			B.push(KB ? O[k][KB] : O[k]);
+		}
+	}
+	return B.length <= 1 ? B[0] : B;
+}
+
+function createCallAFromO(A, getArgs=() => []) {
+	return function(O) {
+		if (O instanceof Array) O.forEach(o => o && o[A] && o[A](...getArgs(O)));
+		else O && O[A] && O[A](...getArgs(O));
 	}
 }
 
@@ -70,125 +90,105 @@ export class Switch {
 }
 
 class SwitchMaster {
-	switchs = [];
+	switchs = {};
 	constructor(configs) {
 		if (configs instanceof Array) {
-			let ids = {}, names = {};
 			configs.forEach(config => {
 				if (config.id) {
-					if (ids[config.id]) throw Error(`\`${config.id}\` repeated with the id of another Swtich.`);
-				}
-				if (config.name) {
-					if (names[config.name]) throw Error(`\`${config.name}\` repeated with the name of another Swtich.`);
+					if (this.switchs[config.id]) throw Error(`\`${config.id}\` repeated with the id of another Swtich.`);
 				}
 				let s = new Switch(config);
-				if (ids[s.id]) s.id = createRandomId("Switch", Object.keys(ids));
-				if (!names[s.name]) {
-					ids[s.id] = 1;
-					names[s.name] = 1;
-					this.switchs.push(s);
-				} else throw Error("Switch name must be a unique string!");
+				if (this.switchs[s.id]) s.id = createRandomId("Switch", Object.keys(this.switchs));
+				this.switchs[s.id] = s;
 			})
 		}
 	}
 
 	addSwitch(s) {
 		if (s instanceof Switch) {
-			if (!this.switchs.some(_s => {
-				let uniqueId = _s.id == s.id;
-				let uniqueName = _s.name == s.name;
-				if (uniqueId) throw Error(`\`${s.id}\` repeated with the id of another Swtich.`);
-				if (uniqueName) throw Error(`\`${s.name}\` repeated with the name of another Swtich.`);
-				return uniqueId || uniqueName;
-			})) {
-				this.switchs.push(s);
+			if (this.switchs[s.id]) {
+				throw Error(`\`${s.id}\` repeated with the id of another Swtich.`);
 			}
+			this.switchs[s.id] = s;
 		}
 	}
 
 	removeSwitch(s) {
-		if (s instanceof Switch) {
-			let index = this.switchs.indexOf(s);
-			if (index != -1) this.switchs.splice(index, 1);
-		}
+		if (!(s instanceof Array)) s = [s];
+		s.forEach(_s => {
+			if (_s instanceof Switch) {
+				delete this.switchs[_s.id];
+			}
+		});
 	}
 
 	removeSwitchById(id) {
-		let ids = id;
-		if (!(id instanceof Array)) ids = [id];
-		removeAsFromOs(this.switchs, "id", ids);
+		if (!(id instanceof Array)) id = [id];
+		id.forEach(_id => delete this.switchs[_id]);
 	}
 
 	removeSwitchByName(name) {
-		let names = name;
 		if (!(name instanceof Array)) names = [name];
-		removeAsFromOs(this.switchs, "name", names);
+		name.forEach(_name => {
+			for (let k in this.switchs) {
+				if (this.switchs[k].name == _name) {
+					delete this.switchs[k];
+				}
+			}
+		})
 	}
 
 	getSwitchById(id) {
-		return this.switchs.find(s => s == id);
-	}
-
-	getSwitchsByIds(ids) {
-		return getBsFromOsByAs(this.switchs, "id", ids);
+		if (id instanceof Array) {
+			return id.map(_id => this.switchs[_id]);
+		}
+		return this.switchs[id];
 	}
 
 	getSwitchByName(name) {
-		return this.switchs.find(s => s.name == name);
+		return getBFromOByA(this.switchs, "name", name);
 	}
 
-	getSwitchsByNames(names) {
-		return getBsFromOsByAs(this.switchs, "name", names);
+	getNameById(id) {
+		if (id instanceof Array) {
+			return id.map(_id => this.switchs[_id]?.name);
+		}
+		return this.switchs[id]?.name;
 	}
 
-	getNamesByIds(ids) {
-		return getBsFromOsByAs(this.switchs, "id", ids, "name");
-	}
-
-	getIdsByNames(names) {
-		return getBsFromOsByAs(this.switchs, "name", names, "id");
-	}
-
-	closeById(id) {
-		let s = this.switchs.find(s => s.id == id);
-		s && s.close();
+	getIdByName(name) {
+		return getBFromOByA(this.switchs, "name", name, "id");
 	}
 
 	closeById(id) {
-		let ids = id;
-		if (!(id instanceof Array)) ids = [id];
-		this.getSwitchsByIds(ids).switchs.forEach(s => s && s.close());
+		if (!(id instanceof Array)) id = [id];
+		this.getSwitchById(id).forEach(s => s && s.close && s.close());
 	}
 
 	closeByName(name) {
-		let names = name;
-		if (!name instanceof Array) names = [name];
-		this.getSwitchsByNames(names).forEach(s => s && s.close());
+		if (!(name instanceof Array)) name = [name];
+		this.getSwitchByName(name).forEach(createCallAFromO("close"));
 	}
 
 	openById(id) {
-		let ids = id;
-		if (!(id instanceof Array)) ids = [id];
-		this.getSwitchsByIds(ids).forEach(s => s && s.open());
+		if (!(id instanceof Array)) id = [id];
+		this.getSwitchById(id).forEach(s => s && s.open && s.open());
 	}
 
 	openByName(name) {
-		let names = name;
-		if (!(name instanceof Array)) names = [name];
-		console.log(names, !(name instanceof Array))
-		console.log(this.getSwitchsByNames(names), names)
-		this.getSwitchsByNames(names).forEach(s => s && s.open());
+		if (!(name instanceof Array)) name = [name];
+		this.getSwitchByName(name).forEach(createCallAFromO("open"));
 	}
 
 	toggleById(config) {
 		if (config instanceof Object) {
-			this.getSwitchsByIds(Object.keys(config)).forEach(s => s && s.toggle(config[s]));
+			this.getSwitchById(Object.keys(config)).forEach(s => s && s.toggle && s.toggle(config[s.id]));
 		}
 	}
 
 	toggleByName(config) {
 		if (config instanceof Object) {
-			this.getSwitchsByNames(Object.keys(config)).forEach(s => s && s.toggle(config[s]));
+			this.getSwitchByName(Object.keys(config)).forEach(createCallAFromO("toggle", s => [config[s.name]]));
 		}
 	}
 }
