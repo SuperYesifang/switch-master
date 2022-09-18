@@ -8,13 +8,13 @@
 > 开关管家，当你有许多开关逻辑耦合时，你需要它！
 >
 
-[中文文档](./docs/zh_CN.md)
+[English Document](../README.md)
 
 <div align="center">
   <a href="https://nodei.co/npm/switch-master/"><img src="https://nodei.co/npm/switch-master.png?downloads=true&downloadRank=true&stars=true"></a>
 </div>
 
-## Run Simple Demo
+## 运行简单示例
 
 ```shell
 $ git clone https://github.com/SuperYesifang/switch-master.git
@@ -22,11 +22,11 @@ $ cd switch-master
 $ npm run serve
 ```
 
-## Usage
+## 使用
 
 `new SwitchMaster(configs:SwitchOption[]):SwitchMaster`
 
-### 1. Use CDN
+### 1.以CDN方式使用
 
 ```html
 <script src="https://raw.githubusercontent.com/SuperYesifang/switch-master/master/dist/SwitchMaster.cdn.js"></script>
@@ -42,7 +42,7 @@ let master = new SwitchMaster([
 
 
 
-### 2. Use ESM
+### 2. 以ESM方式使用
 
 ```js
 import SwitchMaster from "switch-master";
@@ -59,43 +59,43 @@ let master = SwitchMaster([
 
 ## switchOption
 
-| prop         | type      | description                                                  |
+| 属性         | 类型      | 描述                                                  |
 | ------------ | --------- | ------------------------------------------------------------ |
-| `id` | string | switch's unique id. default SwitchMaster will auto create random id. |
-| `name`   | string | switch's name. default `config.id` |
-| `status` | string | switch's initial status. default `false`. |
+| `id` | string | 开关的唯一id，默认 SwitchMaster 将会自动生成随机id。 |
+| `name`   | string | 开关的名称，默认为 `config.id` |
+| `status` | string | 开关的初始状态，默认为 `false`. |
 
 ## API
 
 ### new Switch()
 `new Switch(config:SwitchOption):Switch`
 
-Instantiation a switch.
+实例化一个开关。
 
 ### new SwitchMaster()
 `new SwitchMaster(configs:SwitchOption[]):SwitchMaster`
 
-Instantiation a switch master.
+实例化一个开关管家。
 
 ### switch.open()
 `switch.open()`
 
-Set the status of switch to `true`.
+将开关的状态设置为 `true`。
 
 ### switch.close()
 `switch.close()`
 
-Set the status of switch to `false`.
+将开关的状态设置为 `false`。
 
 ### switch.toggle()
 `switch.toggle(status:undefined | boolean)`
 
-Toggle switch's status. support custom status.
+切换开关的状态。支持自定义状态。
 
 ### switch.onChange()
 `switch.onChange(listener):removeListener`
 
-Add a status change listener to switch.
+添加一个状态变化监听器到开关。
 
 **@types**
 ```ts
@@ -124,71 +124,72 @@ console.log(master.switchs);
 ### master.switchs
 `master.switchs:{[id:string]:Switch}`
 
-all switchs collection of the master.
+管家的所有开关集合。
 
 ### master.addSwtich()
 `master.addSwtich(s:Switch|Swtich[])`
 
-add swtich(s) to master.
+添加开关到管家。
 
 ### master.removeSwitch()
 `master.removeSwitch(s:Switch|Switch[])`
 
-remove switch(s) from master.
+从管家删除指定开关
 
 ### master.removeSwitchById()
 `master.removeSwitchById(id:string|string[])`
 
-remove switch(s) from master by id(s).
+根据id从管家删除开关。
 
 ### master.removeSwitchByName()
 `master.removeSwitchByName(name:string|string[])`
 
-remove switch(s) from master by name(s).
+根据name从管家删除开关。
 
 ### master.getSwitchById()
 `master.getSwitchById(id:string|string[]):Switch|Switch[]`
 
-get switch(s) from master by id(s).
+根据id从管家获取开关。
 
 ### master.getSwitchByName()
 `master.getSwitchByName(name:string|string[]):Switch|Array(Switch|Switch[])`
 
-get switch(s) from master by name(s).
+根据name从管家获取开关。
+
 ### getNameById()
 `master.getNameById(id:string|string[]):string|string[]`
 
-get switch's name(s) from master by id(s).
+根据id(s)从管家获取id对应的name。
 
 ### getIdByName()
 `master.getIdByName(name:string|string[]):string|Array<string|string[]>`
 
-get switch's id(s) from master by name(s).
+根据name(s)从管家获取name对应的id(s)。
 
 ### openById()
 `master.openById(id:string|string[])`
 
-open switch by id(s).
+根据id(s)打开开关。
 
 ### openByName()
 `master.openByName(name:string|string[])`
 
-open switch by name(s).
+根据name(s)打开开关。
 
 ### closeById()
 `master.closeById(id:string|string[])`
 
-close switch by id(s).
+根据id(s)关闭开关
 
 ### closeByName()
 `master.closeByName(name:string|string[])`
 
-close switch by name(s).
+根据name(s)关闭开关。
 
 ### toggleById()
 `master.toggleById(config)`
 
-toggle switch by id config.
+根据id配置切换开关状态。
 
 ```js
 master.toggleById({
@@ -207,7 +208,7 @@ type config = {
 ### toggleByName()
 `master.toggleByName(config)`
 
-toggle switch by name config.
+根据name配置切换开关状态。
 
 ```js
 master.toggleByName({
