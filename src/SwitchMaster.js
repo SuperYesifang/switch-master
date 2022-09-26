@@ -91,6 +91,7 @@ export class Switch {
 
 class SwitchMaster {
 	switchs = {};
+	initialStatus = {};
 	constructor(configs) {
 		if (configs instanceof Array) {
 			configs.forEach(config => {
@@ -100,6 +101,7 @@ class SwitchMaster {
 				let s = new Switch(config);
 				if (this.switchs[s.id]) s.id = createRandomId("Switch", Object.keys(this.switchs));
 				this.switchs[s.id] = s;
+				this.initialStatus[s.id] = s.status;
 			})
 		}
 	}
@@ -190,6 +192,17 @@ class SwitchMaster {
 		if (config instanceof Object) {
 			this.getSwitchByName(Object.keys(config)).forEach(createCallAFromO("toggle", s => [config[s.name]]));
 		}
+	}
+
+	reset(id) {
+		let ids;
+		if (id) {
+			if (!(id instanceof Array)) ids = [id];
+			else ids = id;
+		} else {
+			ids = Object.keys(this.initialStatus);
+		}
+		ids.forEach(_id => this.switchs[_id] &&this.switchs[_id].toggle(initialStatus[_id]));
 	}
 }
 
