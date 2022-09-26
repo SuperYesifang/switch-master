@@ -202,7 +202,7 @@ class SwitchMaster {
 		} else {
 			ids = Object.keys(this.initialStatus);
 		}
-		ids.forEach(_id => this.switchs[_id] &&this.switchs[_id].toggle(initialStatus[_id]));
+		ids.forEach(_id => this.switchs[_id] &&this.switchs[_id].toggle(this.initialStatus[_id]));
 	}
 }
 
