@@ -1,6 +1,6 @@
 # switch-master
 
-![switch-master](https://img.shields.io/badge/switch--master-v0.2.4-%23C50008?logo=npm)
+![switch-master](https://img.shields.io/badge/switch--master-v0.3.0-%23C50008?logo=npm)
 [![blog](https://img.shields.io/badge/blog-yesifang.com-orange?logo=data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAABjFBMVEUAAAAIAQUiBhQVBA05CyK0I2z4MJTgKoV8GEoKAgZyFkT8MZfTKX4dBRFWEDP9MZfMJ3kGAQQHAQTlK4htFUEAHRMATDAAbUQAf1EAh1QAgFAAbUUATDAAHhNMDy7KJngAeUsAKBp9GEr4MJMDAQIAmWEAWzkABAOGGlD9MZYAcUgABQNoFD7mLIoAZUCdHl4ANiKiH2EpCBgAh1UAAgERAwrVKH9nFD0ALBwSAwuqIWXmK4pTEDIAWTgrCBp2F0eVHVmKG1NWETMAdEgAgVAAAQIAJTcATXIAZJQAbqUAap0AVoEAfE4AAQEAN1EAgMAAaEIACQ4Aap4ARiwACQ0AebMAmV8AEwwAAAAAZ5oAZT8AMkkAkFoAEQsAebMAl14AGCQAkl0ALx4AOlYAeEsAGRAATHAAbkUAll0All4AbkYAMB4ATXMABwQAIxYANiIAPicANyIAJBYAQF4AIjIAis0AAgMAhsYAZJYARWYAk9oAHy4ABQcAfbkAO1gAis3/MZgAmmEAld3///8EabibAAAAgHRSTlMACCIVObX54XwKcv3UHVb+zQYH5m0xfrTU4NW1fzJMy8hDffkD/pcHh/69CGjnqJ5ZoynfBBHWZ0kSqudTlCt2lotWwNUCQIOrvrWVzwFe3a4QtnQPz/0gAbKnVe4c0Psp9E9jximBtvj4t0+FCzpaZlo7bTruA+Wtdfs1CNdm7ZpKyEIAAAABYktHRIP8tM/SAAAAB3RJTUUH5QoVBh0NInrzjgAAATtJREFUOMt902VbwzAUBeDLcAYMhru7uzPcXYcP1+EyPMkvZ03TNk0TztfzNnL7BECeCFck/JOo6BiEYuPiVX2CG9EkJsn7ZA9iSUmV9d40ZCYdICMzKzsnNy+/wASFVo+KALCR4hIGSjlQVm4BXFFZRUE1B2q8HMC4tk4D9RxoABvAjRpwuS3QJADcrIkW6witImhrD4OOTtZ7ukAEuFtboqeXjqqvH5xgQL/qoG9oeET/FQIYdQxWAGNmMT4xOTU9MyuCOVbPLywSGhEs6f3yCiFysEr7tXWiABubWu/fIiqwTRfYISqwu0fBvgoc0DlCgCjA4ZF+hWMFODllMzizgfML2l5eXfuNGd7YAARv7+4fHoPc9J/swJlnrn+Rgdc3C4SkT+vd7D8+peDr2+h/FK838Ev3D4W//wNiKCWwWalJAwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMS0xMC0yMVQwNjoyOToxMyswMDowMP1Zb/cAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjEtMTAtMjFUMDY6Mjk6MTMrMDA6MDCMBNdLAAAAAElFTkSuQmCC)](//yesifang.com)
 
 > Switch Master, when you have many switch coupling logic, you need it!
@@ -196,16 +196,26 @@ console.log(master.switchs);
 
 根据id配置切换开关状态。
 
+```js
+master.toggleById('Switch__e76cfa8771c4'); // id
+master.toggleById({
+  'Switch__e76cfa8771c4': true,
+  'Switch__10476415b997': false
+}); // id:status 配置
+master.toggleById([
+  'Switch__e76cfa8771c4',
+  'Switch__10476415b997'
+]); // 多个id
+master.toggleById([
+  'Switch__e76cfa8771c4',
+  { 'Switch__10476415b997': true }
+]); // 多个id和多个id:status配置
+```
+
 ### reset()
 `master.reset(id?)`
 
 根据id(s)?将开关状态重置为初始状态。
-
-```js
-master.toggleById({
-  'Switch__e76cfa8771c4': true,
-  'Switch__10476415b997': false
-})
 ```
 
 **@types**
@@ -221,10 +231,19 @@ type config = {
 根据name配置切换开关状态。
 
 ```js
+master.toggleByName('panel1'); // name
 master.toggleByName({
-  "panel1": true,
-  "panel3": false
-})
+  'panel1': true,
+  'panel3': false
+}); // name:status 配置
+master.toggleByName([
+  'panel1',
+  'panel3'
+]); // 多个name
+master.toggleByName([
+  'panel1',
+  { 'panel3': true }
+]); // 多个name和多个name:status配置
 ```
 **@types**
 

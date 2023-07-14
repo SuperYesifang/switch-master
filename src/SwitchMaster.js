@@ -183,14 +183,28 @@ class SwitchMaster {
 	}
 
 	toggleById(config) {
-		if (config instanceof Object) {
+		if (config instanceof Array) {
+			config.forEach(id => {
+				if (id instanceof Object) this.toggleById(id);
+				else this.switchs[id]?.toggle();
+			});
+		} else if (config instanceof Object) {
 			this.getSwitchById(Object.keys(config)).forEach(s => s && s.toggle && s.toggle(config[s.id]));
+		} else {
+			this.switchs[config]?.toggle();
 		}
 	}
 
 	toggleByName(config) {
-		if (config instanceof Object) {
+		if (config instanceof Array) {
+			config.forEach(id => {
+				if (id instanceof Object) this.toggleByName(id);
+				else this.getSwitchByName(id)?.toggle();
+			});
+		} else if (config instanceof Object) {
 			this.getSwitchByName(Object.keys(config)).forEach(createCallAFromO("toggle", s => [config[s.name]]));
+		} else {
+			this.getSwitchByName(config)?.toggle();
 		}
 	}
 
