@@ -112,6 +112,7 @@ class SwitchMaster {
 				throw Error(`\`${s.id}\` repeated with the id of another Swtich.`);
 			}
 			this.switchs[s.id] = s;
+			this.initialStatus[s.id] = s.status;
 		}
 	}
 
@@ -120,13 +121,17 @@ class SwitchMaster {
 		s.forEach(_s => {
 			if (_s instanceof Switch) {
 				delete this.switchs[_s.id];
+				delete this.initialStatus[s.id];
 			}
 		});
 	}
 
 	removeSwitchById(id) {
 		if (!(id instanceof Array)) id = [id];
-		id.forEach(_id => delete this.switchs[_id]);
+		id.forEach(_id => {
+			delete this.switchs[_id];
+			delete this.initialStatus[s.id];
+		});
 	}
 
 	removeSwitchByName(name) {
@@ -135,6 +140,7 @@ class SwitchMaster {
 			for (let k in this.switchs) {
 				if (this.switchs[k].name == _name) {
 					delete this.switchs[k];
+					delete this.initialStatus[k];
 				}
 			}
 		})
