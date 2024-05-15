@@ -69,14 +69,16 @@ export class Switch {
 		this.status = !!config.status;
 	}
 
-	onChange(listener) {
-		this.listeners.add(listener);
-		return () => this.listeners.delete(listener);
+	onChange(listener, lazy=false) {
+		let params = { listener, lazy };
+		this.listeners.add(params);
+		return () => this.listeners.delete(params);
 	}
 
 	toggle(status) {
-		this.status = status === void 0 ? !this.status : status;
-		[...this.listeners].forEach(cb => cb(this.status));
+		let preStatus = this.status;
+		let curStatus = this.status = status === void 0 ? !this.status : status;
+		[...this.listeners].forEach(({ listener, lazy }) => (!(lazy && (preStatus === curStatus))) && listener(this.status));
 	}
 
 	close() {
